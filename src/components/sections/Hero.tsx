@@ -9,7 +9,7 @@ const WA_LINK = "https://walink.co/e12b25";
 const stats = [
   { icon: <Users className="h-4 w-4" />, value: "500+", label: "Pacientes" },
   { icon: <Award className="h-4 w-4" />, value: "8+", label: "Años de exp." },
-  { icon: <Star className="h-4 w-4 fill-current" />, value: "4.9", label: "Valoración" },
+  { icon: <Star className="h-4 w-4 fill-current" />, value: "5", label: "Valoración" },
 ];
 
 const fadeUp = (delay: number) => ({
@@ -350,7 +350,7 @@ export function Hero() {
                 ))}
               </div>
               <span style={{ marginTop: "2px", fontSize: "0.7rem", fontWeight: 600, color: "#1e293b" }}>
-                4.9 · Google Reviews
+                5 · Google Reviews
               </span>
             </div>
           </motion.div>
