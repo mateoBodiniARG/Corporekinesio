@@ -16,12 +16,15 @@ import {
 
 const navLinks = [
   { href: "#inicio", label: "Inicio" },
-  { href: "#servicios", label: "Especialidades" },
   { href: "#nosotros", label: "Nosotros" },
-  { href: "#contacto", label: "Contacto" },
+  { href: "#horarios", label: "Horarios" },
+  { href: "#servicios", label: "Especialidades" },
+  { href: "#obras-sociales", label: "Obras Sociales" },
+  { href: "#opiniones", label: "Por qué elegirnos" },
+  { href: "#ubicacion", label: "Ubicación" },
 ];
 
-const WA_LINK = "https://api.whatsapp.com/send/?phone=%2B543412502044&text&type=phone_number&app_absent=0&utm_source=ig";
+const WA_LINK = "https://walink.co/e12b25";
 
 export function Header() {
   return (
@@ -33,21 +36,17 @@ export function Header() {
           className="flex items-center gap-3 flex-shrink-0"
         >
           <div className="relative h-10 w-10 overflow-hidden rounded-full shadow-sm ring-1 ring-black/5 bg-white flex items-center justify-center">
-            <Image 
-              src="/MotusLogo.png" 
-              alt="Mōtus Logo" 
-              fill 
-              className="object-contain p-1"
-              sizes="40px"
-              priority
-            />
+            {/* Provide a placeholder or the actual logo if available. Ensure src matches public folder later. */}
+            <div className="flex h-10 w-10 items-center justify-center rounded-full text-white font-bold bg-primary">
+              C
+            </div>
           </div>
           <div className="leading-tight hidden sm:block">
             <span className="block text-sm font-bold text-foreground">
-              Mōtus Clínica Integral
+              Corpore
             </span>
             <span className="block text-xs text-primary font-medium">
-              Salud y Bienestar
+              Kinesiología & Fisiatría
             </span>
           </div>
         </Link>
@@ -71,14 +70,15 @@ export function Header() {
         <div className="flex items-center gap-2 md:hidden">
           <Sheet>
             <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9"
+              <button
+                className="flex h-9 w-9 items-center justify-center rounded-full transition-colors"
+                style={{ color: "#1A73E8" }}
+                onMouseEnter={e => (e.currentTarget.style.background = "#EEF4FF")}
+                onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
                 aria-label="Abrir menú"
               >
                 <Menu className="h-5 w-5" />
-              </Button>
+              </button>
             </SheetTrigger>
 
             <SheetContent
@@ -89,26 +89,24 @@ export function Header() {
               <SheetHeader className="flex flex-row items-center justify-between px-5 py-4 border-b border-border">
                 <div className="flex items-center gap-2.5">
                   <div
-                    className="flex h-8 w-8 items-center justify-center rounded-full text-white flex-shrink-0 font-bold"
-                    style={{
-                      background: "linear-gradient(135deg,#7350F2,#2B1966)",
-                    }}
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-white flex-shrink-0 font-bold bg-primary"
                   >
-                    M
+                    C
                   </div>
                   <SheetTitle className="text-base font-bold leading-tight">
-                    Mōtus Clínica Integral
+                    Corpore Kinesiología
                   </SheetTitle>
                 </div>
                 <SheetClose asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 flex-shrink-0"
+                  <button
+                    className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-colors"
+                    style={{ color: "#1A73E8" }}
+                    onMouseEnter={e => (e.currentTarget.style.background = "#EEF4FF")}
+                    onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
                     aria-label="Cerrar menú"
                   >
                     <X className="h-4 w-4" />
-                  </Button>
+                  </button>
                 </SheetClose>
               </SheetHeader>
 
@@ -136,7 +134,7 @@ export function Header() {
                 <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
                 <div className="text-sm text-muted-foreground leading-snug">
                   <p className="font-semibold text-foreground">Dirección</p>
-                  <p>Brown 2622, Rosario</p>
+                  <p>Entre Ríos 3753, Rosario</p>
                   <p>Santa Fe, Argentina</p>
                 </div>
               </div>

@@ -2,6 +2,7 @@ import { Hero } from "@/components/sections/Hero";
 import { AboutUs } from "@/components/sections/AboutUs";
 import { Horarios } from "@/components/sections/Horarios";
 import { Services } from "@/components/sections/Services";
+import { ObrasSociales } from "@/components/sections/ObrasSociales";
 import { Reviews } from "@/components/sections/Reviews";
 import { Ubicacion } from "@/components/sections/Ubicacion";
 import { Indicaciones } from "@/components/sections/Indicaciones";
@@ -14,6 +15,7 @@ export default function Home() {
       <AboutUs />
       <Horarios />
       <Services />
+      <ObrasSociales />
       <Reviews />
       <Ubicacion />
       <Indicaciones />

@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ChevronDown, Shirt, FileText, Clock } from "lucide-react";
-import { useState } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { ChevronRight, Shirt, FileText, Clock } from "lucide-react";
+import { useRef, useState } from "react";
 
 type IndicacionItem = {
   id: string;
@@ -48,123 +48,186 @@ const indicaciones: IndicacionItem[] = [
 
 function AccordionItem({
   item,
+  index,
   isOpen,
   onToggle,
+  inView,
 }: {
   item: IndicacionItem;
+  index: number;
   isOpen: boolean;
   onToggle: () => void;
+  inView: boolean;
 }) {
   const isList = Array.isArray(item.content);
 
   return (
-    <div className="overflow-hidden rounded-2xl bg-white border border-border shadow-sm transition-shadow hover:shadow-md">
-      <button
-        onClick={onToggle}
-        className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
-        aria-expanded={isOpen}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.4, delay: 0.15 + index * 0.1 }}
+    >
+      <div
+        className={`overflow-hidden rounded-2xl border transition-all duration-300 ${
+          isOpen
+            ? "border-primary/30 shadow-md bg-background"
+            : "border-border bg-background hover:border-primary/20 hover:shadow-sm"
+        }`}
       >
-        <div className="flex items-center gap-3">
+        {/* Header */}
+        <button
+          onClick={onToggle}
+          className="flex w-full items-center gap-4 px-6 py-5 text-left"
+          aria-expanded={isOpen}
+        >
+          {/* Index number */}
+          <span
+            className="text-[11px] font-black tracking-widest tabular-nums shrink-0"
+            style={{ color: isOpen ? "var(--primary)" : undefined }}
+          >
+            0{index + 1}
+          </span>
+
+          {/* Icon */}
           <div
-            className="flex h-9 w-9 items-center justify-center rounded-xl text-white flex-shrink-0"
-            style={{ background: "linear-gradient(135deg,#7350F2,#2B1966)" }}
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors duration-300 ${
+              isOpen ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
+            }`}
           >
             {item.icon}
           </div>
-          <span className="font-semibold text-foreground text-base">{item.title}</span>
-        </div>
-        <ChevronDown
-          className="h-5 w-5 flex-shrink-0 text-primary transition-transform duration-300"
-          style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}
-        />
-      </button>
 
-      <div
-        className="overflow-hidden transition-all duration-400 ease-in-out"
-        style={{ maxHeight: isOpen ? (isList ? "600px" : "200px") : "0px" }}
-      >
-        <div className="px-6 pb-6 border-t border-border pt-4 space-y-2">
-          {isList ? (
-            <>
-              <ul className="space-y-3">
-                {(item.content as string[]).map((point, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-sm text-muted-foreground leading-relaxed">
-                    <span
-                      className="mt-1.5 flex h-2 w-2 flex-shrink-0 rounded-full"
-                      style={{ background: "#7350F2" }}
-                    />
-                    {point}
-                  </li>
-                ))}
-              </ul>
-              {item.note && (
-                <p
-                  className="mt-4 text-sm font-semibold pt-3 border-t border-border"
-                  style={{ color: "#7350F2" }}
+          {/* Title */}
+          <span className="flex-1 font-bold text-foreground text-base">
+            {item.title}
+          </span>
+
+          {/* Arrow */}
+          <ChevronRight
+            className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300"
+            style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)" }}
+          />
+        </button>
+
+        {/* Content */}
+        <AnimatePresence initial={false}>
+          {isOpen && (
+            <motion.div
+              key="content"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="overflow-hidden"
+            >
+              <div className="px-6 pb-6 pt-1 border-t border-border/60">
+                {/* Left accent bar + content */}
+                <div
+                  className="pl-5 mt-4 space-y-3"
+                  style={{ borderLeft: "2px solid var(--primary)" }}
                 >
-                  {item.note}
-                </p>
-              )}
-            </>
-          ) : (
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              {item.content as string}
-            </p>
+                  {isList ? (
+                    <ul className="space-y-3">
+                      {(item.content as string[]).map((point, i) => (
+                        <motion.li
+                          key={i}
+                          initial={{ opacity: 0, x: -8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.07, duration: 0.25 }}
+                          className="flex items-start gap-2.5 text-sm text-muted-foreground leading-relaxed"
+                        >
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary/50" />
+                          {point}
+                        </motion.li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {item.content as string}
+                    </p>
+                  )}
+
+                  {item.note && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                      className="mt-4 flex items-start gap-2 rounded-xl px-4 py-3 bg-primary/8"
+                    >
+                      <span className="text-xs font-semibold leading-relaxed text-primary">
+                        {item.note}
+                      </span>
+                    </motion.div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
           )}
-        </div>
+        </AnimatePresence>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
 export function Indicaciones() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <section id="indicaciones" className="py-20">
-      <div className="container mx-auto px-4 md:px-6">
+    <section id="indicaciones" ref={ref} className="relative bg-background py-20 sm:py-28">
 
-        {/* Heading */}
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 max-w-6xl">
+
+        {/* ── Eyebrow ── */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-12 text-center"
+          initial={{ opacity: 0, x: -12 }}
+          animate={inView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.4 }}
+          className="mb-10 flex items-center gap-3"
         >
-          <div
-            className="mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-widest"
-            style={{ background: "#F4F5F7", color: "#7350F2" }}
-          >
+          <span className="h-px w-8 bg-primary" />
+          <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
             Guías para pacientes
-          </div>
-          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground">
-            Indicaciones
-          </h2>
-          <p className="mt-3 text-muted-foreground max-w-md mx-auto">
-            Preparate antes de tu visita. Seguí estas guías para que todo salga perfecto.
-          </p>
+          </span>
         </motion.div>
 
-        {/* Accordion */}
-        <div className="max-w-2xl mx-auto flex flex-col gap-3">
-          {indicaciones.map((item, i) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
-            >
+        {/* ── Layout ── */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "3rem" }}>
+
+          {/* Headline block */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            style={{ maxWidth: "36rem" }}
+          >
+            <h2 className="text-4xl sm:text-5xl font-black tracking-tight leading-[1.08] text-foreground">
+              Todo lo que necesitás{" "}
+              <em className="not-italic text-primary">saber</em>
+              <br />
+              antes de venir
+            </h2>
+            <p className="mt-5 text-base text-muted-foreground leading-relaxed">
+              Seguí estas indicaciones para que tu primera visita sea fluida y podamos enfocarnos en lo más importante: tu recuperación.
+            </p>
+          </motion.div>
+
+          {/* Accordion */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", maxWidth: "42rem" }}>
+            {indicaciones.map((item, i) => (
               <AccordionItem
+                key={item.id}
                 item={item}
+                index={i}
                 isOpen={openId === item.id}
                 onToggle={() => setOpenId(openId === item.id ? null : item.id)}
+                inView={inView}
               />
-            </motion.div>
-          ))}
-        </div>
+            ))}
+          </div>
 
+        </div>
       </div>
     </section>
   );

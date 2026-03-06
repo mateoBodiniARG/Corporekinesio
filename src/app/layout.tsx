@@ -6,12 +6,13 @@ import { Header } from "@/components/layout/Header";
 const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mōtus Clínica Integral",
-  description: "Clínica de salud integral enfocada en el cuidado personalizado, el bienestar físico y el seguimiento humano en Rosario.",
+  title: "Corpore Kinesiología & Fisiatría",
+  description:
+    "Un espacio orientado al cuidado integral del movimiento. Tratamientos personalizados para rehabilitar lesiones de manera segura y eficaz en Rosario.",
   icons: {
     icon: "/LogoBlancoFavIcon.png",
     apple: "/LogoBlancoFavIcon.png",
-  }
+  },
 };
 
 export default function RootLayout({
@@ -21,11 +22,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className="scroll-smooth">
-      <body className={`${outfit.className} min-h-screen bg-background text-foreground antialiased flex flex-col`}>
+      <body
+        className={`${outfit.className} min-h-screen bg-background text-foreground antialiased flex flex-col`}
+      >
         <Header />
-        <main className="flex-1">
-          {children}
-        </main>
+        <main className="flex-1">{children}</main>
+
       </body>
     </html>
   );

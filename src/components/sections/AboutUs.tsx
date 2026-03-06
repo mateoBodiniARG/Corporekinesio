@@ -4,59 +4,39 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import {
-  ShieldCheck,
-  HeartPulse,
-  Clock4,
-  Microscope,
+  Activity,
+  Zap,
+  Brain,
+  Wind,
+  Dumbbell,
+  Droplets,
+  Users,
   Star,
   Award,
-  Users,
-  Stethoscope,
-  Smile,
-  Activity,
-  CheckCircle,
+  Layers,
 } from "lucide-react";
 
 /* ─── Data ──────────────────────────────────────────────────── */
 const stats = [
-  { value: 10, suffix: "+", label: "Años de experiencia", icon: Award },
-  { value: 570, suffix: "+", label: "Pacientes atendidos", icon: Users },
-  { value: 5, suffix: "", label: "Especialidades", icon: Stethoscope },
-  { value: 4.9, suffix: "★", label: "Reseñas de Google", icon: Star },
+  { value: 5, suffix: "+", label: "Años de trayectoria", icon: Award },
+  { value: 300, suffix: "+", label: "Pacientes acompañados", icon: Users },
+  { value: 10, suffix: "", label: "Especialidades", icon: Layers },
+  { value: 5.0, suffix: "★", label: "Calificación en Google", icon: Star },
 ];
 
-const benefits = [
-  {
-    icon: Smile,
-    title: "Seguimiento Personalizado",
-    desc: "Nos preocupamos por tu evolución, preguntando por tu estado y progreso.",
-    color: "text-emerald-600",
-    bg: "bg-emerald-50",
-  },
-  {
-    icon: CheckCircle,
-    title: "Calidad del Espacio",
-    desc: "Instalaciones impecables y muy bien cuidadas para tu máximo confort.",
-    color: "text-sky-600",
-    bg: "bg-sky-50",
-  },
-  {
-    icon: HeartPulse,
-    title: "Calidad Profesional",
-    desc: "Un equipo altamente capacitado y sumamente querido por sus pacientes.",
-    color: "text-rose-600",
-    bg: "bg-rose-50",
-  },
-  {
-    icon: Activity,
-    title: "Enfoque Preventivo",
-    desc: "No solo tratamos lesiones, sino que mejoramos tu salud y bienestar general.",
-    color: "text-violet-600",
-    bg: "bg-violet-50",
-  },
+const specialties = [
+  { icon: Activity, label: "Lesiones deportivas y traumatológicas", color: "#16a34a" },
+  { icon: Droplets, label: "Drenaje linfático", color: "#0284c7" },
+  { icon: Users, label: "Geriatría", color: "#7c3aed" },
+  { icon: Brain, label: "Neurología", color: "#db2777" },
+  { icon: Wind, label: "Respiratoria", color: "#0891b2" },
+  { icon: Zap, label: "Taping neuromuscular", color: "#d97706" },
+  { icon: Layers, label: "Ventosas neumáticas", color: "#dc2626" },
+  { icon: Dumbbell, label: "Gimnasio terapéutico", color: "#059669" },
+  { icon: Activity, label: "Discapacidad", color: "#6366f1" },
 ];
 
-/* ─── Animated counter hook ─────────────────────────────────── */
+/* ─── Animated counter ───────────────────────────────────────── */
 function useCounter(target: number, duration = 1400, triggered: boolean) {
   const [count, setCount] = useState(0);
   useEffect(() => {
@@ -78,7 +58,8 @@ function useCounter(target: number, duration = 1400, triggered: boolean) {
   return count;
 }
 
-function StatCard({
+/* ─── Stat strip item ─────────────────────────────────────────── */
+function StatItem({
   stat,
   index,
   triggered,
@@ -91,24 +72,26 @@ function StatCard({
   const Icon = stat.icon;
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={triggered ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.45, delay: 0.2 + index * 0.1, ease: "easeOut" }}
-      className="flex flex-col items-center justify-center rounded-2xl bg-background/80 backdrop-blur-sm border border-border/40 p-4 shadow-sm hover:shadow-md transition-shadow"
+      transition={{ duration: 0.45, delay: 0.1 + index * 0.1, ease: "easeOut" }}
+      className="flex flex-col items-start gap-1 border-l-2 border-primary/30 pl-5 py-1"
     >
-      <Icon className="mb-1.5 h-4 w-4 text-primary" strokeWidth={1.75} />
-      <span className="text-xl font-extrabold tracking-tight text-foreground">
+      <div className="flex items-center gap-2 text-primary/70">
+        <Icon className="h-3.5 w-3.5" strokeWidth={2} />
+        <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-muted-foreground">
+          {stat.label}
+        </span>
+      </div>
+      <span className="text-3xl sm:text-4xl font-black tracking-tighter text-foreground leading-none">
         {count}
-        {stat.suffix}
-      </span>
-      <span className="mt-0.5 text-center text-[11px] leading-snug text-muted-foreground">
-        {stat.label}
+        <span className="text-primary text-2xl sm:text-3xl">{stat.suffix}</span>
       </span>
     </motion.div>
   );
 }
 
-/* ─── Section ─────────────────────────────────────────────────── */
+/* ─── Section ────────────────────────────────────────────────── */
 export function AboutUs() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const inView = useInView(sectionRef, { once: true, margin: "-80px" });
@@ -117,135 +100,108 @@ export function AboutUs() {
     <section
       id="nosotros"
       ref={sectionRef}
-      className="relative bg-background py-16 sm:py-24 overflow-hidden"
+      className="relative bg-background py-20 sm:py-28 overflow-hidden"
     >
-      {/* Ambient blobs */}
-      <div className="pointer-events-none absolute -top-40 -left-40 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
 
-      <div className="container relative z-10 mx-auto px-4 sm:px-6">
 
-        {/* ── Section header ── */}
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 max-w-6xl">
+
+        {/* ── Eyebrow label ── */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: -8 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="mb-12 text-center max-w-2xl mx-auto"
+          transition={{ duration: 0.4 }}
+          className="mb-10 flex items-center justify-center gap-3"
         >
-          <div className="mb-4 inline-flex items-center rounded-full border border-primary/20 bg-primary/8 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-primary">
-            Nuestra Propuesta
-          </div>
-          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
-            Cuidado integral para tu{" "}
-            <span className="text-primary">bienestar</span>
-          </h2>
-          <p className="mt-4 text-muted-foreground text-sm sm:text-base leading-relaxed">
-            Un equipo humano apasionado por acompañarte en cada paso hacia una mejor calidad de vida.
-          </p>
+          <span className="h-px w-8 bg-primary" />
+          <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
+            Sobre nosotros
+          </span>
+          <span className="h-px w-8 bg-primary" />
         </motion.div>
 
-        {/* ── Bento Grid Layout ── */}
-        <div className="mx-auto max-w-6xl space-y-6">
-          
-          {/* Top Row: Image & Intro */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            
-            {/* Image Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="lg:col-span-7 relative min-h-[350px] lg:min-h-[440px] rounded-3xl overflow-hidden shadow-lg ring-1 ring-black/5 group"
-            >
-              <Image
-                src="/2024-03-28.webp"
-                alt="Instalaciones de Mōtus Clínica Integral"
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-                sizes="(max-width: 1024px) 100vw, 60vw"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
-              
-              <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between gap-4">
-                <div className="rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 p-4 shadow-xl">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/90 text-white shadow-inner">
-                      <ShieldCheck className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-sm md:text-base font-bold text-white leading-tight">
-                        Espacio ideal para tu recuperación
-                      </p>
-                      <p className="text-xs text-white/80 mt-0.5">
-                        Instalaciones equipadas para tu bienestar
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+        {/* ── Content ── */}
+        <div className="max-w-3xl mx-auto flex flex-col items-center gap-10 text-center">
 
-            {/* Text Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
-              className="lg:col-span-5 flex flex-col justify-center rounded-3xl bg-muted/40 p-8 sm:p-10 shadow-sm ring-1 ring-black/5 border border-border"
-            >
-              <div className="space-y-6">
-                <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-                  En <strong className="font-semibold text-foreground">Mōtus Clínica Integral</strong>, nuestra misión es brindarte un cuidado personalizado y humano, enfocándonos tanto en la recuperación de lesiones como en la mejora continua de tu salud integral.
-                </p>
-                <div className="h-px w-12 bg-primary/20 rounded-full" />
-                <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-                  Con profesionales de primer nivel como <span className="text-foreground font-medium">Facundo, Estanislao y Ramiro</span>, garantizamos un seguimiento constante de tu evolución en un espacio pensado exclusivamente para tu bienestar.
-                </p>
-              </div>
-            </motion.div>
-          </div>
+          {/* Headline */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.05, ease: "easeOut" }}
+          >
+            <h2 className="text-4xl sm:text-5xl lg:text-[3.25rem] font-black tracking-tight leading-[1.08] text-foreground">
+              Kinesiología{" "}
+              <em className="not-italic text-primary">con foco</em>
+              <br />
+              en tu recuperación
+            </h2>
+          </motion.div>
 
-          {/* Middle Row: Stats */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {/* Body text */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
+            className="space-y-5"
+          >
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl">
+              En <strong className="font-semibold text-foreground">Corporekinesio</strong>, combinamos el rigor profesional con un trato humano y cercano. Nuestra directora,{" "}
+              <span className="font-medium text-foreground">
+                Lic. Valero María del Rocío (Mat. 2308/2)
+              </span>
+              , lidera un equipo comprometido con tu bienestar desde el primer día.
+            </p>
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl">
+              Cada tratamiento es diseñado a medida, integrando técnicas modernas y un seguimiento constante. Porque recuperarse bien no es solo volver al punto de partida, sino superarlo.
+            </p>
+          </motion.div>
+
+          {/* Stats strip */}
+          <div className="grid grid-cols-2 gap-x-8 gap-y-7 sm:grid-cols-4">
             {stats.map((stat, i) => (
-              <StatCard key={stat.label} stat={stat} index={i} triggered={inView} />
+              <StatItem key={stat.label} stat={stat} index={i} triggered={inView} />
             ))}
           </div>
 
-          {/* Bottom Row: Benefits */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {benefits.map((b, i) => {
-              const Icon = b.icon;
-              return (
-                <motion.div
-                  key={b.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{
-                    duration: 0.4,
-                    delay: 0.3 + i * 0.1,
-                    ease: "easeOut",
-                  }}
-                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                  className="group flex flex-col gap-4 rounded-3xl bg-background p-6 shadow-sm ring-1 ring-black/5 border border-border hover:shadow-md transition-all"
-                >
-                  <div className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl ${b.bg} ${b.color} transition-transform duration-300 group-hover:scale-110 shadow-sm`}>
-                    <Icon className="h-6 w-6" strokeWidth={1.75} />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-foreground mb-1.5 break-words">
-                      {b.title}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-muted-foreground">
-                      {b.desc}
-                    </p>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
+          {/* Divider */}
+          <div className="h-px w-full bg-border" />
+
+          {/* Specialties */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.45, delay: 0.25, ease: "easeOut" }}
+          >
+            <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
+              Especialidades
+            </p>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {specialties.map((s, i) => {
+                const Icon = s.icon;
+                return (
+                  <motion.div
+                    key={s.label}
+                    initial={{ opacity: 0, scale: 0.88 }}
+                    animate={inView ? { opacity: 1, scale: 1 } : {}}
+                    transition={{ duration: 0.3, delay: 0.3 + i * 0.04, ease: "easeOut" }}
+                    className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 shadow-sm hover:shadow-md transition-shadow cursor-default"
+                  >
+                    <Icon
+                      className="h-3 w-3 shrink-0"
+                      style={{ color: s.color }}
+                      strokeWidth={2.5}
+                    />
+                    <span className="text-[12px] font-medium text-foreground whitespace-nowrap">
+                      {s.label}
+                    </span>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
 
         </div>
+
       </div>
     </section>
   );
